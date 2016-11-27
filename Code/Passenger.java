@@ -27,4 +27,17 @@ public class Passenger extends Person{
 		this.birthday = birthday;
 	}
 
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof Passenger))
+		{
+			return false;
+		}
+		else
+		{
+			Passenger other = (Passenger) obj;
+			return (this.address.equalsIgnoreCase(other.address) && this.birthday.equals(other.birthday) && super.getName().equalsIgnoreCase(other.getName()));
+		}
+	}
+
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class Chauffeur extends Person{
 
@@ -5,6 +7,7 @@ public class Chauffeur extends Person{
 	private String employmentType;
 	private String preferences;
 	private int id;
+	private ArrayList<MyDate> schedule;
 	
 	public Chauffeur(String name, String phoneNumber,String employmentType, String preferences, int id)
 	{
@@ -45,5 +48,18 @@ public class Chauffeur extends Person{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof Chauffeur))
+		{
+			return false;
+		}
+		else
+		{
+			Chauffeur other = (Chauffeur) obj;
+			return (this.phoneNumber.equalsIgnoreCase(other.phoneNumber) && this.employmentType.equalsIgnoreCase(other.employmentType) && this.id == other.id && this.preferences.equalsIgnoreCase(other.preferences));
+		}
 	}
 }

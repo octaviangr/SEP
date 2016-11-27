@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Customer extends Person{
+
+public class Customer extends Person implements Serializable{
 	
 	private String address;
 	private String phoneNumber;
@@ -35,6 +37,12 @@ public class Customer extends Person{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [address=" + address + ", phoneNumber=" + phoneNumber
+				+ ", email=" + email + "]";
 	}
 
 }

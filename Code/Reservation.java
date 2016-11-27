@@ -19,7 +19,7 @@ public class Reservation {
 		this.seats = seats;
 		this.preferences = preferences;
 	}
-	
+
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -66,5 +66,44 @@ public class Reservation {
 
 	public void setPreferences(String preferences) {
 		this.preferences = preferences;
+	}
+	public String toString() {
+		return "Reservation [customer=" + customer + ", passengers="
+				+ passengers + ", tour=" + tour + ", price=" + price
+				+ ", seats=" + seats + ", preferences=" + preferences + "]";
+	}
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Reservation other = (Reservation) obj;
+		if (customer == null) {
+			if (other.customer != null)
+				return false;
+		} else if (!customer.equals(other.customer))
+			return false;
+		if (passengers == null) {
+			if (other.passengers != null)
+				return false;
+		} else if (!passengers.equals(other.passengers))
+			return false;
+		if (preferences == null) {
+			if (other.preferences != null)
+				return false;
+		} else if (!preferences.equals(other.preferences))
+			return false;
+		if (price != other.price)
+			return false;
+		if (seats != other.seats)
+			return false;
+		if (tour == null) {
+			if (other.tour != null)
+				return false;
+		} else if (!tour.equals(other.tour))
+			return false;
+		return true;
 	}
 }

@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+
 
 public class Bus {
 
 	private String type;
 	private String make;
 	private String model;
+	private ArrayList<MyDate> bookings;// same as the chauffeur schedule - days in which is not available
 	
 	public Bus(String type, String make, String model)
 	{
