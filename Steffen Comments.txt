@@ -1,0 +1,23 @@
+- system displays only a notification if the customer went on X trips
+- then employee will set discount
+
+- MyDate with hours minutes
+
+- search filter for tours,passengers etc
+
+- passengers data: age instead of birthay + adress optional
+
+- food preferences for the whole passengers not every one in particular
+
+- ask for customer data before passengers
+
+- when employee created a trip/tour he will set price for one seat
+- when he makes reservation employee will insert a discount an the final price will be automatically calculated
+
+- Notificaiton: there are no chauffeurs available, there are no busses available
+
+- when a tour is deleted the employee will get a list with passengers emails and their reseravations will be deleted
+
+- when create a tour employee must select a bus and a chauffeur
+
+- prices for adults,children
