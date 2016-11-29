@@ -6,6 +6,8 @@ public class Customer extends Person implements Serializable{
 	private String address;
 	private String phoneNumber;
 	private String email;
+	private int numberOfBookings;
+	private int moneySpent;
 	
 	public Customer(String name, String address, String phoneNumber, String email)
 	{
@@ -14,7 +16,29 @@ public class Customer extends Person implements Serializable{
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 	}
-
+	public String getFrequencyInfo()
+	{
+		String all = String.format("This customer made %d bookings and spent %d DKK in the past", numberOfBookings,moneySpent);
+		return all;
+	}
+	
+	public int getNumberOfBookings()
+	{
+		return numberOfBookings;
+	}
+	public void setNumberOfBookings(int number)
+	{
+		this.numberOfBookings = number;
+	}
+	public int getMoneySpent()
+	{
+		return this.moneySpent;
+	}
+	public void setMoneySpent(int money)
+	{
+		this.moneySpent = money;
+	}
+	
 	public String getAddress() {
 		return address;
 	}

@@ -16,6 +16,8 @@ public class ReservationList {
 		{
 			if(reservations.get(i).equals(reservation))
 			{
+				int oldBookings = reservations.get(i).getCustomer().getNumberOfBookings();
+				reservations.get(i).getCustomer().setNumberOfBookings(oldBookings++);
 				reservations.remove(i);
 			}
 		}
