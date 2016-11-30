@@ -13,6 +13,8 @@ public class Reservation {
 	public Reservation(Customer customer, ArrayList<Passenger> passengers, Tour tour, int price, int seats, String preferences)
 	{
 		this.customer = customer;
+		int oldBookings = this.customer.getNumberOfBookings();
+		this.customer.setNumberOfBookings(oldBookings++);
 		this.passengers = passengers;
 		this.tour = tour;
 		this.price = price;

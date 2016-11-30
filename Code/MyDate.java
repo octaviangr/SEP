@@ -7,10 +7,12 @@ public class MyDate implements Serializable
    private int day;
    private int month;
    private int year;
+   private int hour;
+   private int minute;
    
-   public MyDate(int day, int month, int year)
+   public MyDate(int day, int month, int year, int hour, int minute)
    {
-      set(day, month, year);
+      set(day, month, year, hour, minute);
    }
 
    public MyDate()
@@ -26,7 +28,7 @@ public class MyDate implements Serializable
       return new MyDate();
    }
 
-   public void set(int day, int month, int year)
+   public void set(int day, int month, int year, int hour, int minute)
    {
       if (year < 0)
       {
@@ -53,6 +55,8 @@ public class MyDate implements Serializable
          day = numberOfDaysInMonth();
       }
       this.day = day;
+      this.hour = hour;
+      this.minute = minute;
    }
 
    public int getDay()
@@ -154,21 +158,6 @@ public class MyDate implements Serializable
       }
    }
 
-   public int yearsBetween(MyDate other)
-   {
-      int years = Math.abs(this.year - other.year);
-
-      MyDate date1 = new MyDate(this.day, this.month, 2000);
-      MyDate date2 = new MyDate(other.day, other.month, 2000);
-
-      if ((this.isBefore(other) && date2.isBefore(date1))
-            || ((other.isBefore(this) && date1.isBefore(date2))))
-      {
-         years--;
-      }
-      return years;
-   }
-
    public int daysBetween(MyDate other)
    {
       int days = 0;
@@ -203,7 +192,7 @@ public class MyDate implements Serializable
 
    public MyDate copy()
    {
-      return new MyDate(day, month, year);
+      return new MyDate(day, month, year, hour,minute);
    }
 
    public boolean equals(Object obj)
@@ -218,17 +207,7 @@ public class MyDate implements Serializable
 
    public String toString()
    {
-      String s = "";
-      if (day < 10)
-      {
-         s += "0";
-      }
-      s += day + "/";
-      if (month < 10)
-      {
-         s += "0";
-      }
-      s += month + "/" + year;
+      String s = String.format("%02d/%02d/%02d", day,month,year);
 
       return s;
    }

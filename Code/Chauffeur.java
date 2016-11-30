@@ -46,6 +46,10 @@ public class Chauffeur extends Person{
 		return id;
 	}
 
+	public String toString() {
+		return " " + super.getName();
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}

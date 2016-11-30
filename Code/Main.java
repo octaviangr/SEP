@@ -20,11 +20,12 @@ public class Main {
 		Bus bus = new Bus("MiniBus","Mercedes","A69");
 		Tour tour = new Tour(bday,bday,"Horsens","Budapest",stops,bus,50,"sex slaves");
 		Reservation reservation = new Reservation(bob,passengers,tour,500,3,"sex slave");
-		System.out.println(reservation);
+		//System.out.println(reservation);
 		CustomerList customers = new CustomerList();
 		customers.addCustomer(bob);
 		customers.SaveData();
 		System.out.println(customers.getCustomerByName("Bob").getEmail());
+		System.out.println(tour.toString());
 	}
 
 }

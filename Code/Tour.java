@@ -3,22 +3,22 @@ import java.util.*;
 public class Tour {
 
 	private ArrayList<Chauffeur> chauffeurs;
-	private Bus bus; //to be changed if we want to save the busses properly
+	private String busType;
 	private MyDate departureTime;
 	private MyDate returnTime;
 	private String departureLocation;
-	private String returnLocation;
-	private ArrayList<String> stops;
+	private String arrivalLocation;
+	private String stops;
 	private int numberOfSeats;
 	private String extras;
 	
-	public Tour(MyDate departureTime, MyDate returnTime,String departureLocation, String returnLocation, ArrayList<String> stops,Bus bus, int numberOfSeats, String extras)
+	public Tour(MyDate departureTime, MyDate returnTime,String departureLocation, String returnLocation, String stops,String busType, int numberOfSeats, String extras)
 	{
 		this.departureTime = departureTime;
 		this.returnTime = returnTime;
 		this.departureLocation = departureLocation;
-		this.returnLocation = returnLocation;
-		this.bus = bus;
+		this.arrivalLocation = returnLocation;
+		this.busType = busType;
 		this.stops = stops;
 		this.numberOfSeats = numberOfSeats;
 		this.extras = extras;
@@ -32,12 +32,12 @@ public class Tour {
 		this.departureLocation = departureLocation;
 	}
 
-	public String getReturnLocation() {
-		return returnLocation;
+	public String getArrivalLocation() {
+		return arrivalLocation;
 	}
 
-	public void setReturnLocation(String returnLocation) {
-		this.returnLocation = returnLocation;
+	public void setArrivalLocation(String returnLocation) {
+		this.arrivalLocation = returnLocation;
 	}
 
 	public ArrayList<Chauffeur> getChauffeurs() {
@@ -48,12 +48,12 @@ public class Tour {
 		this.chauffeurs = chauffeurs;
 	}
 
-	public Bus getBus() {
-		return bus;
+	public String getBusType() {
+		return busType;
 	}
 
-	public void setBus(Bus bus) {
-		this.bus = bus;
+	public void setBusType(String bus) {
+		this.busType = bus;
 	}
 
 	public MyDate getDepartureTime() {
@@ -72,11 +72,11 @@ public class Tour {
 		this.returnTime = returnTime;
 	}
 
-	public ArrayList<String> getStops() {
+	public String getStops() {
 		return stops;
 	}
 
-	public void setStops(ArrayList<String> stops) {
+	public void setStops(String stops) {
 		this.stops = stops;
 	}
 
@@ -104,10 +104,10 @@ public class Tour {
 		if (getClass() != obj.getClass())
 			return false;
 		Tour other = (Tour) obj;
-		if (bus == null) {
-			if (other.bus != null)
+		if (busType == null) {
+			if (other.busType != null)
 				return false;
-		} else if (!bus.equals(other.bus))
+		} else if (!busType.equals(other.busType))
 			return false;
 		if (chauffeurs == null) {
 			if (other.chauffeurs != null)
@@ -131,10 +131,10 @@ public class Tour {
 			return false;
 		if (numberOfSeats != other.numberOfSeats)
 			return false;
-		if (returnLocation == null) {
-			if (other.returnLocation != null)
+		if (arrivalLocation == null) {
+			if (other.arrivalLocation != null)
 				return false;
-		} else if (!returnLocation.equals(other.returnLocation))
+		} else if (!arrivalLocation.equals(other.arrivalLocation))
 			return false;
 		if (returnTime == null) {
 			if (other.returnTime != null)
@@ -147,6 +147,10 @@ public class Tour {
 		} else if (!stops.equals(other.stops))
 			return false;
 		return true;
+	}
+	public String toString() {
+		String all = String.format("%s > %s - seats %d - %s", departureLocation, arrivalLocation, numberOfSeats, departureTime.toString());
+		return all;
 	}
 	
 }
