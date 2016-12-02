@@ -1,0 +1,48 @@
+Sebastian
+- User guide
+- GUI design break-down (design)
+- Blooms forms (the first one we did in CSE) + Blooms forms (a new one now)
+- Implementation
+- Requirements
+- UML break down
+- Consideration essay
+
+Octavian
+- Group Policy
+- Consideration essay
+- Blooms forms (the first one we did in CSE) + Blooms forms (a new one now)
+- Daily project log
+- Meeting reports
+- Sequence diagram (create a reservation)
+
+Martin
+- SWOT analysis part
+- Consideration essay
+- Blooms forms (the first one we did in CSE) + Blooms forms (a new one now)
+- Abstract
+- Update the old introduction
+- Discussion
+
+Mihai
+- Consideration essay
+- Blooms forms (print screen)
+- Blooms forms (the first one we did in CSE) + Blooms forms (a new one now)
+- System analysis
+
+Toghether
+- Task log
+- Test
+- Results
+- Conclusion
+- References
+
+
+WHAT WE HAVE
+- SWOT diagrams for eveyone
+- SWOT for group
+- Activity diagrams for every use case
+- Bloom's diagrams (first one)
+- Requirements
+- Use case diagram
+- Class diagram (condensed)
+- Class diagrams (complex)
