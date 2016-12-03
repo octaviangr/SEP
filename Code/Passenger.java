@@ -1,14 +1,16 @@
+import java.io.Serializable;
 
-public class Passenger extends Person{
+
+public class Passenger extends Person implements Serializable{
 	
 	private String address;
-	private MyDate birthday;
+	private int age;
 	
-	public Passenger(String name, String address, MyDate birthday)
+	public Passenger(String name, String address, int age)
 	{
 		super(name);
 		this.address = address;
-		this.birthday = birthday;
+		this.age = age;
 	}
 
 	public String getAddress() {
@@ -19,12 +21,12 @@ public class Passenger extends Person{
 		this.address = address;
 	}
 
-	public MyDate getBirthday() {
-		return birthday;
+	public int getAge() {
+		return age;
 	}
 
-	public void setBirthday(MyDate birthday) {
-		this.birthday = birthday;
+	public void setAge(int age) {
+		this.age = age;
 	}
 
 	public boolean equals(Object obj)
@@ -36,7 +38,7 @@ public class Passenger extends Person{
 		else
 		{
 			Passenger other = (Passenger) obj;
-			return (this.address.equalsIgnoreCase(other.address) && this.birthday.equals(other.birthday) && super.getName().equalsIgnoreCase(other.getName()));
+			return (this.address.equalsIgnoreCase(other.address) && this.age == other.age && super.getName().equalsIgnoreCase(other.getName()));
 		}
 	}
 

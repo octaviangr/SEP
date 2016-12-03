@@ -1,6 +1,7 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
 import javax.swing.*;
@@ -8,21 +9,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 
-public class GUI extends JFrame{
+public class GUI extends JFrame implements Serializable{
 
-	public static void main (String[] args)
+	//private static ArrayList<Tour> tourslist = new ArrayList<>();
+	//private static ArrayList<Chauffeur> chauffeurslist = new ArrayList<>();
+	public static void main (String[] args) throws ClassNotFoundException, IOException
 	{
-		String stops1 = "Berlin";
-		MyDate bday = new MyDate();
-		Tour tour = new Tour(bday,bday,"Horsens","Budapest",stops1,"Regular",50,"sex slaves");
-		Chauffeur cha = new Chauffeur("Trip Driver","04563666","FullTime","i like cheese",45);
-		Chauffeur cha2 = new Chauffeur("Speed Driver","03657666","FullTime","i like me",46);
 		
 		//Lists:
-		ArrayList<Tour> tourslist = new ArrayList<>();
-		ArrayList<Chauffeur> chauffeurslist = new ArrayList<>();
-		chauffeurslist.add(cha);
-		chauffeurslist.add(cha2);
+		ArrayList<Tour> tourslist = TourList.LoadData();
+		ArrayList<Chauffeur> chauffeurslist = ChauffeursList.LoadData();
+		ArrayList<Chauffeur> availableChauffeurs = new ArrayList<>();
+		boolean departuredate = false;
 		
 		
 		JFrame frame = new JFrame("VIA BUS");
@@ -34,7 +32,6 @@ public class GUI extends JFrame{
 		JPanel ToursListPanel = new JPanel(new BorderLayout());
 		JLabel label1 = new JLabel("Tours List:");
 		ToursListPanel.add(label1, BorderLayout.NORTH);
-		tourslist.add(tour);
 		JList ToursList = new JList(tourslist.toArray());
 		ToursList.setVisibleRowCount(15);
 		ToursList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -57,10 +54,29 @@ public class GUI extends JFrame{
 		JTextField fields2 = new JTextField(10);
 		JTextField fields3 = new JTextField(10);
 		JTextField fields4 = new JTextField(10);
+		fields4.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent e)
+            {
+            	String[] content = fields4.getText().split("/");
+            	if(content.length == 3)
+            	{
+	            	if(Integer.parseInt(content[0]) > 0 && Integer.parseInt(content[1]) > 0 && Integer.parseInt(content[2]) > 0)
+	            	{
+	            		MyDate ndate = new MyDate(0,0,0,0,0);
+	            		if(ndate.checkDate(Integer.parseInt(content[0]), Integer.parseInt(content[1]), Integer.parseInt(content[2])))
+	            		{
+	            			System.out.println("Departure date was inserted OK");
+	            			//departuredate = true;
+	            		}
+	            	}
+            	}
+            }  
+        });
 		JTextField fields5 = new JTextField(10);
 		JTextField fields6 = new JTextField(10);
 		JTextField fields7 = new JTextField(10);
 		ArrayList<String> bussesTypes = new ArrayList<>();
+		bussesTypes.add("None");
 		bussesTypes.add("Mini");
 		bussesTypes.add("Regular");
 		bussesTypes.add("Luxury");
@@ -68,9 +84,73 @@ public class GUI extends JFrame{
 		JComboBox<String> bussesCombo = new JComboBox<>();
 		bussesCombo.setModel(new DefaultComboBoxModel(bussesTypes.toArray()));
 		JComboBox<String> chauffeurCombo1 = new JComboBox<>();
-		chauffeurCombo1.setModel(new DefaultComboBoxModel(chauffeurslist.toArray()));
+		chauffeurCombo1.setModel(new DefaultComboBoxModel(availableChauffeurs.toArray()));
 		JComboBox<String> chauffeurCombo2 = new JComboBox<>();
-		chauffeurCombo2.setModel(new DefaultComboBoxModel(chauffeurslist.toArray()));
+		chauffeurCombo2.setModel(new DefaultComboBoxModel(availableChauffeurs.toArray()));
+		fields5.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent e)
+            {
+            	String[] content = fields5.getText().split("/");
+            	if(content.length == 3)
+            	{
+	            	if(Integer.parseInt(content[0]) > 0 && Integer.parseInt(content[1]) > 0 && Integer.parseInt(content[2]) > 0)
+	            	{
+	            		MyDate ndate = new MyDate(0,0,0,0,0);
+	            		if(ndate.checkDate(Integer.parseInt(content[0]), Integer.parseInt(content[1]), Integer.parseInt(content[2])))
+	            		{
+	            			try
+	            			{
+		            			System.out.println("Arrival date was inserted OK");
+		            			System.out.println("Display list of availableChauffeurs");
+		            			String[] content1 = fields4.getText().split("/");
+		    	            	String[] content2 = fields5.getText().split("/");
+		    	            	MyDate Date1 = new MyDate(Integer.parseInt(content1[0]),Integer.parseInt(content1[1]),Integer.parseInt(content1[2]),0,0);
+		    	            	MyDate Date2 = new MyDate(Integer.parseInt(content2[0]),Integer.parseInt(content2[1]),Integer.parseInt(content2[2]),0,0);
+		            			ArrayList<Chauffeur> availableChauffeurs2 = new ArrayList<>();
+		            			// get available chauffeurs
+		            			boolean available = true;
+		            			for(int i = 0; i<chauffeurslist.size(); i++)
+		            			{
+		            				if(chauffeurslist.get(i).getSchedule().isEmpty())
+		            				{
+		            					availableChauffeurs.add(chauffeurslist.get(i));
+		            					break;
+		            				}
+		            				ArrayList<MyDate> schedule = chauffeurslist.get(i).getSchedule();
+		            				ArrayList<MyDate> dates = Date1.getDatesBetween(Date2);
+		            				for(int j = 0; j<schedule.size(); j++)
+		            				{
+		            					for(int z = 0; z<dates.size(); z++)
+		            					{
+		            						if(schedule.get(j).equals(dates.get(z)))
+		            						{
+		            							available = false;
+		            							break;
+		            						}
+		            					}
+		            					if(available == false)
+		            					{
+		            						break;
+		            					}
+		            				}
+		            				if(available)
+		            				{
+		            					availableChauffeurs2.add(chauffeurslist.get(i));
+		            				}
+		            				available = true;
+		            			}
+		            			// end get available chauffeurs
+		            			chauffeurCombo1.setModel(new DefaultComboBoxModel(availableChauffeurs2.toArray()));
+	            			}
+	            			catch(Exception e1)
+	            			{
+	            				System.out.println("Checking dates");
+	            			}
+	            		}
+	            	}
+            	}
+            }  
+        });
 		ToursInfoPanel.add(infolabel1);
 		ToursInfoPanel.add(fields1);
 		ToursInfoPanel.add(infolabel2);
@@ -104,22 +184,30 @@ public class GUI extends JFrame{
             	}
             	else
             	{
-            		String depLoc = fields1.getText();
-	            	String arrLoc = fields2.getText();
-	            	String[] content = fields4.getText().split("/");
-	            	String[] content2 = fields5.getText().split("/");
-	            	MyDate depDate = new MyDate(Integer.parseInt(content[0]),Integer.parseInt(content[1]),Integer.parseInt(content[2]),0,0);
-	            	MyDate retDate = new MyDate(Integer.parseInt(content2[0]),Integer.parseInt(content2[1]),Integer.parseInt(content2[2]),0,0);
-	            	int seats = Integer.parseInt(fields6.getText());
-	            	String stops = fields3.getText();
-	            	String extras = fields7.getText();
-	            	Tour ntour = new Tour(depDate, retDate, depLoc, arrLoc, stops,null, seats, extras);
-	            	ArrayList<Chauffeur> nchauffeurs = new ArrayList<>();
-	            	nchauffeurs.add((Chauffeur) chauffeurCombo1.getSelectedItem());
-	            	nchauffeurs.add((Chauffeur) chauffeurCombo2.getSelectedItem());
-	            	ntour.setChauffeurs(nchauffeurs);
-	            	tourslist.add(ntour);
-	            	ToursList.setListData(tourslist.toArray());
+            		try
+            		{
+	            		String depLoc = fields1.getText();
+		            	String arrLoc = fields2.getText();
+		            	String[] content = fields4.getText().split("/");
+		            	String[] content2 = fields5.getText().split("/");
+		            	MyDate depDate = new MyDate(Integer.parseInt(content[0]),Integer.parseInt(content[1]),Integer.parseInt(content[2]),0,0);
+		            	MyDate retDate = new MyDate(Integer.parseInt(content2[0]),Integer.parseInt(content2[1]),Integer.parseInt(content2[2]),0,0);
+		            	int seats = Integer.parseInt(fields6.getText());
+		            	String stops = fields3.getText();
+		            	String extras = fields7.getText();
+		            	Tour ntour = new Tour(depDate, retDate, depLoc, arrLoc, stops,(String)bussesCombo.getSelectedItem(), seats, extras);
+		            	ArrayList<Chauffeur> nchauffeurs = new ArrayList<>();
+		            	nchauffeurs.add((Chauffeur) chauffeurCombo1.getSelectedItem());
+		            	nchauffeurs.add((Chauffeur) chauffeurCombo2.getSelectedItem());
+		            	ntour.setChauffeurs(nchauffeurs);
+		            	tourslist.add(ntour);
+		            	ToursList.setListData(tourslist.toArray());
+		            	TourList.SaveData(tourslist);
+            		}
+            		catch(Exception e1)
+            		{
+            			System.out.println("Add tour");
+            		}
             	}
             }  
         });
@@ -133,19 +221,27 @@ public class GUI extends JFrame{
             	}
             	else
             	{
-            		Tour selected = tourslist.get(ToursList.getSelectedIndex());
-            		selected.setDepartureLocation(fields1.getText());
-            		selected.setArrivalLocation(fields2.getText());
-            		String[] content = fields4.getText().split("/");
-	            	String[] content2 = fields5.getText().split("/");
-	            	MyDate depDate = new MyDate(Integer.parseInt(content[0]),Integer.parseInt(content[1]),Integer.parseInt(content[2]),0,0);
-	            	MyDate retDate = new MyDate(Integer.parseInt(content2[0]),Integer.parseInt(content2[1]),Integer.parseInt(content2[2]),0,0);
-            		selected.setDepartureTime(depDate);
-            		selected.setReturnTime(retDate);
-            		selected.setStops(fields3.getText());
-            		selected.setExtras(fields7.getText());
-            		selected.setBusType(bussesCombo.getSelectedItem().toString());
-            		ToursList.setListData(tourslist.toArray());
+            		try
+            		{
+	            		Tour selected = tourslist.get(ToursList.getSelectedIndex());
+	            		selected.setDepartureLocation(fields1.getText());
+	            		selected.setArrivalLocation(fields2.getText());
+	            		String[] content = fields4.getText().split("/");
+		            	String[] content2 = fields5.getText().split("/");
+		            	MyDate depDate = new MyDate(Integer.parseInt(content[0]),Integer.parseInt(content[1]),Integer.parseInt(content[2]),0,0);
+		            	MyDate retDate = new MyDate(Integer.parseInt(content2[0]),Integer.parseInt(content2[1]),Integer.parseInt(content2[2]),0,0);
+	            		selected.setDepartureTime(depDate);
+	            		selected.setReturnTime(retDate);
+	            		selected.setStops(fields3.getText());
+	            		selected.setExtras(fields7.getText());
+	            		selected.setBusType(bussesCombo.getSelectedItem().toString());
+	            		ToursList.setListData(tourslist.toArray());
+	            		TourList.SaveData(tourslist);
+            		}
+            		catch(Exception e1)
+            		{
+            			System.out.println("Save tour");
+            		}
             	}
             }   
         });
@@ -153,42 +249,57 @@ public class GUI extends JFrame{
 		buttonRemove.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-            	if(!ToursList.isSelectionEmpty())
+            	try
             	{
-            		tourslist.remove(ToursList.getSelectedIndex());
-            		ToursList.setListData(tourslist.toArray());
+	            	tourslist.remove(ToursList.getSelectedIndex());
+	            	ToursList.setListData(tourslist.toArray());
+	            	TourList.SaveData(tourslist);
             	}
-            	else System.out.println("No field selected");
+            	catch(Exception e1)
+            	{
+            		System.out.println("No field selected");
+            	}
             }   
         });
 		ToursList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e)
             {
-            	fields1.setText(tourslist.get(ToursList.getSelectedIndex()).getDepartureLocation());
-            	fields2.setText(tourslist.get(ToursList.getSelectedIndex()).getArrivalLocation());
-            	fields3.setText(tourslist.get(ToursList.getSelectedIndex()).getStops());
-            	fields4.setText(tourslist.get(ToursList.getSelectedIndex()).getDepartureTime().toString());
-            	fields5.setText(tourslist.get(ToursList.getSelectedIndex()).getReturnTime().toString());
-            	fields6.setText("696969");
-            	fields7.setText(tourslist.get(ToursList.getSelectedIndex()).getExtras());
-            	if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Mini"))
+            	try
             	{
-            		bussesCombo.setSelectedIndex(0);
+	            	fields1.setText(tourslist.get(ToursList.getSelectedIndex()).getDepartureLocation());
+	            	fields2.setText(tourslist.get(ToursList.getSelectedIndex()).getArrivalLocation());
+	            	fields3.setText(tourslist.get(ToursList.getSelectedIndex()).getStops());
+	            	fields4.setText(tourslist.get(ToursList.getSelectedIndex()).getDepartureTime().toString());
+	            	fields5.setText(tourslist.get(ToursList.getSelectedIndex()).getReturnTime().toString());
+	            	fields6.setText("696969");
+	            	fields7.setText(tourslist.get(ToursList.getSelectedIndex()).getExtras());
+	            	if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Mini"))
+	            	{
+	            		bussesCombo.setSelectedIndex(1);
+	            	}
+	            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Regular"))
+	            	{
+	            		bussesCombo.setSelectedIndex(2);
+	            	}
+	            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Luxury"))
+	            	{
+	            		bussesCombo.setSelectedIndex(3);
+	            	}
+	            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Party"))
+	            	{
+	            		bussesCombo.setSelectedIndex(4);
+	            	}
+	            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("None"))
+	            	{
+	            		bussesCombo.setSelectedIndex(0);
+	            	}
+	            	chauffeurCombo1.setSelectedItem(tourslist.get(ToursList.getSelectedIndex()).getChauffeurs().get(0));
+	            	chauffeurCombo2.setSelectedItem(tourslist.get(ToursList.getSelectedIndex()).getChauffeurs().get(1));
             	}
-            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Regular"))
+            	catch(Exception e1)
             	{
-            		bussesCombo.setSelectedIndex(1);
+            		
             	}
-            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Luxury"))
-            	{
-            		bussesCombo.setSelectedIndex(2);
-            	}
-            	else if(tourslist.get(ToursList.getSelectedIndex()).getBusType().equals("Party"))
-            	{
-            		bussesCombo.setSelectedIndex(3);
-            	}
-            	chauffeurCombo1.setSelectedItem(tourslist.get(ToursList.getSelectedIndex()).getChauffeurs().get(0));
-            	chauffeurCombo2.setSelectedItem(tourslist.get(ToursList.getSelectedIndex()).getChauffeurs().get(1));
             }
         });
 		ToursButtonPanel.add(buttonAdd);
@@ -196,10 +307,169 @@ public class GUI extends JFrame{
 		ToursButtonPanel.add(buttonRemove);
 		ToursTab.add(ToursButtonPanel);
 		
-		JPanel chauffeurs = new JPanel();
-		tabbed.add("Chauffeurs",chauffeurs);
+		//CHAUFFEURS TAB
+		JPanel ChauffeursPanel = new JPanel();
+		tabbed.add("Chauffeurs",ChauffeursPanel);
+		//CHAUFFEURS PANEL LIST
+		JPanel ChauffeurListPanel = new JPanel(new BorderLayout());
+		JLabel label21 = new JLabel("Chauffeurs List:");
+		ChauffeurListPanel.add(label21, BorderLayout.NORTH);
+		JList ChauffeurList = new JList(chauffeurslist.toArray());
+		ChauffeurList.setVisibleRowCount(15);
+		ChauffeurList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane scroll2 = new JScrollPane(ChauffeurList);
+		ChauffeurListPanel.add(scroll2,BorderLayout.SOUTH);
+		ChauffeursPanel.add(ChauffeurListPanel);
+		//CHAUFFEURS FORM PANEL
+		JPanel ChauffeursInfoPanel = new JPanel(new GridLayout(5,2));
+		JLabel infolabel21 = new JLabel("Name:");
+		JLabel infolabel22 = new JLabel("Phone Number:");
+		JLabel infolabel23 = new JLabel("Employment Type:");
+		JLabel infolabel24 = new JLabel("Employee ID:");
+		JLabel infolabel25 = new JLabel("Preferences:");
+		JTextField fields21 = new JTextField(10);
+		JTextField fields22 = new JTextField(10);
+		JTextField fields23 = new JTextField(10);
+		JTextField fields24 = new JTextField(10);
+		ArrayList<String> employmentTypes = new ArrayList<>();
+		employmentTypes.add("Full-Time");
+		employmentTypes.add("Part-Time");
+		JComboBox<String> employmentCombo = new JComboBox<>();
+		employmentCombo.setModel(new DefaultComboBoxModel(employmentTypes.toArray()));
+		ChauffeursInfoPanel.add(infolabel21);
+		ChauffeursInfoPanel.add(fields21);
+		ChauffeursInfoPanel.add(infolabel22);
+		ChauffeursInfoPanel.add(fields22);
+		ChauffeursInfoPanel.add(infolabel23);
+		ChauffeursInfoPanel.add(employmentCombo);
+		ChauffeursInfoPanel.add(infolabel24);
+		ChauffeursInfoPanel.add(fields23);
+		ChauffeursInfoPanel.add(infolabel25);
+		ChauffeursInfoPanel.add(fields24);
+		ChauffeursPanel.add(ChauffeursInfoPanel);
+		//CHAUFFEURS BUTTON PANEL
+		//TOURS BUTTONS
+		JPanel ChauffeursButtonPanel = new JPanel(new GridLayout(3,1));
+		JButton buttonAdd2 = new JButton("Add");
+		buttonAdd2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				if(fields21.getText().isEmpty() || fields22.getText().isEmpty() || fields23.getText().isEmpty())
+			    {
+			          System.out.println("Some fields are empty");
+			    }
+			    else
+			    {
+				    String name = fields21.getText();
+					String phone = fields22.getText();
+					int id = Integer.parseInt(fields23.getText());
+					String employment = "";
+					String preferences = fields24.getText();
+					if(employmentCombo.getSelectedIndex() == 0)
+	            	{
+	            		employment = "Full-Time";
+	            	}
+	            	else if(employmentCombo.getSelectedIndex() == 1)
+	            	{
+	            		employment = "Part-Time";
+	            	}
+					Chauffeur newchauffeur = new Chauffeur(name,phone,employment,preferences,id);
+					chauffeurslist.add(newchauffeur);
+				    ChauffeurList.setListData(chauffeurslist.toArray());
+				    try {
+						ChauffeursList.SaveData(chauffeurslist);
+					} catch (IOException e1) {
+
+					}
+			    }
+			}  
+		});
+		JButton buttonSave2 = new JButton("Save");
+		buttonSave2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+		    {
+				if(fields21.getText().isEmpty() || fields22.getText().isEmpty() || fields23.getText().isEmpty() || fields24.getText().isEmpty())
+		        {
+					System.out.println("Some fields are empty");
+		        }
+		        else
+		        {
+		        	Chauffeur selected = chauffeurslist.get(ChauffeurList.getSelectedIndex());
+		            selected.setName(fields21.getText());
+		            selected.setPhoneNumber(fields22.getText());
+		            selected.setId(Integer.parseInt(fields23.getText()));
+		            selected.setPreferences((fields24.getText()));
+		            if(employmentCombo.getSelectedIndex() == 0)
+		            {
+		            	selected.setEmploymentType("Full-Time");
+		            }
+		            else if(employmentCombo.getSelectedIndex() == 1)
+		            {
+		            	selected.setEmploymentType("Part-Time");
+		            }
+		            ChauffeurList.setListData(chauffeurslist.toArray());
+		            try {
+						ChauffeursList.SaveData(chauffeurslist);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }
+		    }   
+		});
+		JButton buttonRemove2 = new JButton("Remove");
+		buttonRemove2.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e)
+		    {
+				if(!ChauffeurList.isSelectionEmpty())
+		        {
+					chauffeurslist.remove(ChauffeurList.getSelectedIndex());
+					ChauffeurList.setListData(chauffeurslist.toArray());
+					try {
+						ChauffeursList.SaveData(chauffeurslist);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }
+		        else System.out.println("No field selected");
+		    }   
+		});
+		ChauffeurList.addListSelectionListener(new ListSelectionListener() {
+		public void valueChanged(ListSelectionEvent e)
+		{
+			fields21.setText(chauffeurslist.get(ChauffeurList.getSelectedIndex()).getName());
+		    fields22.setText(chauffeurslist.get(ChauffeurList.getSelectedIndex()).getPhoneNumber());
+		    fields23.setText(Integer.toString(chauffeurslist.get(ChauffeurList.getSelectedIndex()).getId()));
+		    fields24.setText(chauffeurslist.get(ChauffeurList.getSelectedIndex()).getPreferences());
+		    if(chauffeurslist.get(ChauffeurList.getSelectedIndex()).getEmploymentType().equals("Full-Time"))
+		    {
+		    	employmentCombo.setSelectedIndex(0);
+		    }
+		    else if(chauffeurslist.get(ChauffeurList.getSelectedIndex()).getEmploymentType().equals("Part-Time"))
+		    {
+		    	employmentCombo.setSelectedIndex(1);
+		    }
+		}
+		});
+		ChauffeursButtonPanel.add(buttonAdd2);
+		ChauffeursButtonPanel.add(buttonSave2);
+		ChauffeursButtonPanel.add(buttonRemove2);
+		ChauffeursPanel.add(ChauffeursButtonPanel);
+		
+		
 		JPanel reservations = new JPanel();
 		tabbed.add("Reservations",reservations);
+		//RESERVATIONS FOR TRIP & JOURNEY
+		//// T&J list
+		//// T&J form
+		//// T&J passengers form
+		//// T&J buttons
+		//RESERVATIONS FOR BUS AND CHAUFFEUR
+		//// B&C list
+		//// B&C form
+		//// B&C buttons
 		
 		frame.add(tabbed);
 		frame.setVisible(true);

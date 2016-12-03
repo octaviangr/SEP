@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -22,7 +23,25 @@ public class MyDate implements Serializable
       this.month = now.get(Calendar.MONTH) + 1;
       this.year = now.get(Calendar.YEAR);
    }
-
+   public boolean checkDate(int day, int month, int year)
+   {
+	   return (year>2000 && month > 0 && month < 13 && day <= numberOfDaysInMonth(month));
+   }
+   public ArrayList<MyDate> getDatesBetween(MyDate date)
+   {
+	   ArrayList<MyDate> dates = new ArrayList<>();
+	   int days = this.daysBetween(date);
+	   for(int i = 0; i < days; i++)
+	   {
+		   dates.add(this.copy());
+		   this.stepForwardOneDay();
+		   if(this.equals(date))
+		   {
+			   return dates;
+		   }
+	   }
+	   return dates;
+   }
    public static MyDate now()
    {
       return new MyDate();
@@ -156,6 +175,26 @@ public class MyDate implements Serializable
          default:
             return 31;
       }
+   }
+   public int numberOfDaysInMonth(int month)
+   {
+	  if(month == 4 || month == 6 || month == 9 || month == 11)
+	  {
+		  return 30;
+	  }
+	  else if(month == 2)
+	  {
+		  if (isLeapYear())
+          {
+             return 29;
+          }
+          else
+          {
+             return 28;
+          }
+	  }
+	  else return 31;
+
    }
 
    public int daysBetween(MyDate other)

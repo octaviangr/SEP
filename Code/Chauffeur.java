@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Chauffeur extends Person{
+public class Chauffeur extends Person implements Serializable{
 
 	private String phoneNumber;
 	private String employmentType;
@@ -9,6 +10,14 @@ public class Chauffeur extends Person{
 	private int id;
 	private ArrayList<MyDate> schedule;
 	
+	public ArrayList<MyDate> getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(ArrayList<MyDate> schedule) {
+		this.schedule = schedule;
+	}
+
 	public Chauffeur(String name, String phoneNumber,String employmentType, String preferences, int id)
 	{
 		super(name);
@@ -46,14 +55,14 @@ public class Chauffeur extends Person{
 		return id;
 	}
 
-	public String toString() {
-		return " " + super.getName();
-	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+	public String toString()
+	{
+		String all = String.format("%s - ID: %d", super.getName(),this.id);
+		return all;
+	}
 	public boolean equals(Object obj)
 	{
 		if(!(obj instanceof Chauffeur))

@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Tour {
+public class Tour implements Serializable{
 
 	private ArrayList<Chauffeur> chauffeurs;
 	private String busType;

@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Reservation {
+public class Reservation implements Serializable{
 
 	private Customer customer;
 	private ArrayList<Passenger> passengers;
@@ -70,9 +71,8 @@ public class Reservation {
 		this.preferences = preferences;
 	}
 	public String toString() {
-		return "Reservation [customer=" + customer + ", passengers="
-				+ passengers + ", tour=" + tour + ", price=" + price
-				+ ", seats=" + seats + ", preferences=" + preferences + "]";
+		String all = String.format("Reservation by %s", this.customer.toString());
+		return all;
 	}
 	public boolean equals(Object obj) {
 		if (this == obj)
