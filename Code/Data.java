@@ -114,7 +114,7 @@ public class Data implements Serializable{
 	}
 	public static void SaveCustomersData(ArrayList<Customer> list) throws IOException
 	{
-		String filename = "Customer.bin";
+		String filename = "Customers.bin";
 		File file  = new File(filename);
 		if(!file.exists()) file.createNewFile();
 		FileOutputStream fos = new FileOutputStream(file);

@@ -7,11 +7,12 @@ public class Reservation implements Serializable{
 	private Customer customer;
 	private ArrayList<Passenger> passengers;
 	private Tour tour;
+	private int type; // type 1 trip & journey, type 2 bus chauffeur
 	private int price;
 	private int seats;
 	private String preferences;
 	
-	public Reservation(Customer customer, ArrayList<Passenger> passengers, Tour tour, int price, int seats, String preferences)
+	public Reservation(Customer customer, ArrayList<Passenger> passengers, Tour tour, int price, int seats, String preferences, int type)
 	{
 		this.customer = customer;
 		int oldBookings = this.customer.getNumberOfBookings();
@@ -21,6 +22,15 @@ public class Reservation implements Serializable{
 		this.price = price;
 		this.seats = seats;
 		this.preferences = preferences;
+		this.type = type;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public Customer getCustomer() {

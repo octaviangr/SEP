@@ -2,13 +2,16 @@ import java.io.*;
 import java.util.*;
 
 
-public class BusList {
+public class BusList implements Serializable{
 
 	private int MiniBusses;
 	private int RegularBusses;
 	private int LuxuryBusses;
 	private int PartyBusses;
-	
+	public BusList() throws ClassNotFoundException, IOException
+	{
+		this.LoadData();
+	}
 	public void addBus(String typeOfBus)
 	{
 		if(typeOfBus.equalsIgnoreCase("mini"))
@@ -75,5 +78,29 @@ public class BusList {
 		String busses = String.format("%d,%d,%d,%d", MiniBusses,RegularBusses,LuxuryBusses,PartyBusses);
 		out.println(busses);
 		out.close();
+	}
+	public int getMiniBusses() {
+		return MiniBusses;
+	}
+	public void setMiniBusses(int miniBusses) {
+		MiniBusses = miniBusses;
+	}
+	public int getRegularBusses() {
+		return RegularBusses;
+	}
+	public void setRegularBusses(int regularBusses) {
+		RegularBusses = regularBusses;
+	}
+	public int getLuxuryBusses() {
+		return LuxuryBusses;
+	}
+	public void setLuxuryBusses(int luxuryBusses) {
+		LuxuryBusses = luxuryBusses;
+	}
+	public int getPartyBusses() {
+		return PartyBusses;
+	}
+	public void setPartyBusses(int partyBusses) {
+		PartyBusses = partyBusses;
 	}
 }

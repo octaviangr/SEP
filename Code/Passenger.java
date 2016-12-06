@@ -28,7 +28,11 @@ public class Passenger extends Person implements Serializable{
 	public void setAge(int age) {
 		this.age = age;
 	}
-
+	public String toString()
+	{
+		String all = String.format("%s (Age: %d)", super.getName(),this.age);
+		return all;
+	}
 	public boolean equals(Object obj)
 	{
 		if(!(obj instanceof Passenger))

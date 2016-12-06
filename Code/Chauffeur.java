@@ -60,7 +60,16 @@ public class Chauffeur extends Person implements Serializable{
 	}
 	public String toString()
 	{
-		String all = String.format("%s - ID: %d", super.getName(),this.id);
+		String all = String.format("%s - Phone: %s - ID: %d", super.getName(),this.phoneNumber,this.id);
+		return all;
+	}
+	public String debugString()
+	{
+		String all = String.format("%s - Phone: %s - ID: %d\n", super.getName(),this.phoneNumber,this.id);
+		for(int i = 0; i < this.schedule.size(); i++)
+		{
+			all += "Date " + this.schedule.get(i).toString();
+		}
 		return all;
 	}
 	public boolean equals(Object obj)

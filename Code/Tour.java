@@ -12,8 +12,9 @@ public class Tour implements Serializable{
 	private String stops;
 	private int numberOfSeats;
 	private String extras;
+	private int type;
 	
-	public Tour(MyDate departureTime, MyDate returnTime,String departureLocation, String returnLocation, String stops,String busType, int numberOfSeats, String extras)
+	public Tour(MyDate departureTime, MyDate returnTime,String departureLocation, String returnLocation, String stops,String busType, int numberOfSeats, String extras, int type)
 	{
 		this.departureTime = departureTime;
 		this.returnTime = returnTime;
@@ -23,6 +24,15 @@ public class Tour implements Serializable{
 		this.stops = stops;
 		this.numberOfSeats = numberOfSeats;
 		this.extras = extras;
+		this.type = type;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public String getDepartureLocation() {
@@ -150,8 +160,16 @@ public class Tour implements Serializable{
 		return true;
 	}
 	public String toString() {
-		String all = String.format("%s > %s - seats %d - %s", departureLocation, arrivalLocation, numberOfSeats, departureTime.toString());
-		return all;
+		if(type == 1)
+		{
+			String all = String.format("%s > %s - seats %d - %s", departureLocation, arrivalLocation, numberOfSeats, departureTime.toString());
+			return all;
+		}
+		else
+		{
+			String all = String.format("(BusChauffeur) %s > %s - %s", departureLocation, arrivalLocation, departureTime.toString());
+			return all;
+		}
 	}
 	
 }

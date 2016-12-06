@@ -15,6 +15,8 @@ public class Customer extends Person implements Serializable{
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.numberOfBookings = 0;
+		this.moneySpent = 0;
 	}
 	public String getFrequencyInfo()
 	{
@@ -65,8 +67,8 @@ public class Customer extends Person implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Customer [address=" + address + ", phoneNumber=" + phoneNumber
-				+ ", email=" + email + "]";
+		String all = String.format("%s (Phone: %s, Email: %s)",super.getName(),this.phoneNumber,this.email);
+		return all;
 	}
 
 }
